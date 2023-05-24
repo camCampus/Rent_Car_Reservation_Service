@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.math.BigInteger;
 import java.time.LocalDate;
 
 @Entity
@@ -25,15 +24,14 @@ public class Reservation {
 	private Integer estimateKm;
 	private Integer actualKm;
 	private Integer deposit;
-
-	// Constructeurs, getters et setters
+	private String status;
 
 	public Reservation() {
 		// Constructeur par défaut requis par JPA
 	}
 
 	public Reservation(Integer id, Long licenseId, Integer vehicleId, LocalDate locationStart, LocalDate locationEnd,
-					   Integer estimateKm, Integer actualKm, Integer deposit) {
+					   Integer estimateKm, Integer actualKm, Integer deposit, String status) {
 		this.id = id;
 		this.licenseId = licenseId;
 		this.vehicleId = vehicleId;
@@ -42,6 +40,7 @@ public class Reservation {
 		this.estimateKm = estimateKm;
 		this.actualKm = actualKm;
 		this.deposit = deposit;
+		this.status = status;
 	}
 
 	public Reservation(LocalDate locationStart, LocalDate locationEnd) {
@@ -113,6 +112,10 @@ public class Reservation {
 		this.deposit = deposit;
 	}
 
+	public String getStatus() { return status; }
+
+	public void setStatus(String status) { this.status = status; }
+
 	@Override
 	public String toString() {
 		return "Reservation{" +
@@ -124,6 +127,7 @@ public class Reservation {
 				", estimateKm=" + estimateKm +
 				", actualKm=" + actualKm +
 				", deposit=" + deposit +
+				", status='" + status + '\'' +
 				'}';
 	}
 }

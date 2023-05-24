@@ -9,5 +9,6 @@ CREATE TABLE reservation
     estimate_km    INTEGER,
     actual_km      INTEGER,
     deposit        INTEGER,
+    status         VARCHAR(255),
     PRIMARY KEY (id)
 );

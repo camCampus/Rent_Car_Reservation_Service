@@ -1,6 +1,7 @@
 package com.example.rent_car_reservation_service.web.controller;
 
 import com.example.rent_car_reservation_service.model.Reservation;
+import com.example.rent_car_reservation_service.model.Vehicle;
 import com.example.rent_car_reservation_service.web.dao.ReservationDao;
 import com.example.rent_car_reservation_service.web.service.VehiclesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class ReservationController {
 			reservation.setEstimateKm(updatedReservation.getEstimateKm());
 			reservation.setActualKm(updatedReservation.getActualKm());
 			reservation.setDeposit(updatedReservation.getDeposit());
+			reservation.setStatus(updatedReservation.getStatus());
 			return reservationDao.save(reservation);
 		} else {
 			throw new RuntimeException("Reservation not found with ID: " + id);
@@ -63,10 +65,15 @@ public class ReservationController {
 		reservationDao.deleteById(id);
 	}
 
-	@GetMapping("/testAPIlocalCall")
-	public ResponseEntity<Object> checker() {
+	@GetMapping("/testAll")
+	public ResponseEntity<Vehicle[]> getAllV() {
 		return this.vehiclesService.getAllVehicles();
 	}
+
+//	@GetMapping("/testAviaible")
+//	public List<Vehicle> getAvailableV() {
+//		return this.vehiclesService.getAvailableVehicles();
+//	}
 }
 
 
