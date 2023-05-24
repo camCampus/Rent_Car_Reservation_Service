@@ -16,7 +16,7 @@ public class Reservation {
 	private Integer id;
 
 	private Long licenseId;
-	private Integer vehicleId;
+	private String vehicleId;
 	@NotNull
 	private LocalDate locationStart;
 	@NotNull
@@ -30,7 +30,7 @@ public class Reservation {
 		// Constructeur par défaut requis par JPA
 	}
 
-	public Reservation(Integer id, Long licenseId, Integer vehicleId, LocalDate locationStart, LocalDate locationEnd,
+	public Reservation(Integer id, Long licenseId, String vehicleId, LocalDate locationStart, LocalDate locationEnd,
 					   Integer estimateKm, Integer actualKm, Integer deposit, String status) {
 		this.id = id;
 		this.licenseId = licenseId;
@@ -64,11 +64,11 @@ public class Reservation {
 		this.licenseId = licenseId;
 	}
 
-	public Integer getVehicleId() {
+	public String getVehicleId() {
 		return vehicleId;
 	}
 
-	public void setVehicleId(Integer vehicleId) {
+	public void setVehicleId(String vehicleId) {
 		this.vehicleId = vehicleId;
 	}
 

@@ -3,7 +3,7 @@ CREATE TABLE reservation
 (
     id             INTEGER NOT NULL,
     license_id     BIGINT,
-    vehicle_id     INTEGER,
+    vehicle_id     VARCHAR(255),
     location_start DATE,
     location_end   DATE,
     estimate_km    INTEGER,

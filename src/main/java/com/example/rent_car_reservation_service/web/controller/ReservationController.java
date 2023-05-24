@@ -7,7 +7,6 @@ import com.example.rent_car_reservation_service.web.service.VehiclesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +16,6 @@ import java.util.Optional;
 public class ReservationController {
 
 	private final ReservationDao reservationDao;
-	@Autowired
-	private RestTemplate restTemplate;
 	@Autowired
 	private VehiclesService vehiclesService;
 	@Autowired
@@ -70,10 +67,10 @@ public class ReservationController {
 		return this.vehiclesService.getAllVehicles();
 	}
 
-//	@GetMapping("/testAviaible")
-//	public List<Vehicle> getAvailableV() {
-//		return this.vehiclesService.getAvailableVehicles();
-//	}
+	@GetMapping("/testAviaible")
+	public Vehicle[] getAvailableV() {
+		return this.vehiclesService.getAvailableVehicles();
+	}
 }
 
 
