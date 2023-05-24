@@ -62,4 +62,4 @@ INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_en
 VALUES (20, NULL, 'MW-056-LM', '2023-06-06', '2023-06-16', NULL, NULL, NULL, "PENDING");
 
 INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
-VALUES (20, NULL, 'KC-070-PA', '2023-06-06', '2023-06-16', NULL, NULL, NULL, "PENDING");
+VALUES (21, NULL, 'KC-070-PA', '2023-06-06', '2023-06-16', NULL, NULL, NULL, "PENDING");
