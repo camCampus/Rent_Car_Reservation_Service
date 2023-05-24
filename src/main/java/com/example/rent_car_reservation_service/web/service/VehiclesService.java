@@ -2,39 +2,69 @@ package com.example.rent_car_reservation_service.web.service;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import com.example.rent_car_reservation_service.model.Vehicle;
-import com.example.rent_car_reservation_service.web.dao.ReservationDao;
-import com.example.rent_car_reservation_service.web.dao.VehicleDao;
+import com.example.rent_car_reservation_service.web.Repository.ReservationRepository;
+import com.example.rent_car_reservation_service.web.Repository.VehicleRepository;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
 public class VehiclesService {
 	@Autowired
 	private RestTemplate restTemplate;
-	private VehicleDao vehicleDao;
-	private ReservationDao reservationDao;
+	private VehicleRepository vehicleDao;
+	private ReservationRepository reservationDao;
+
+	private String vehicleServiceIp = "192.168.1.206";
+
+	private int vehicleServicePort = 8082;
+
 
 	@Autowired
-	public VehiclesService(VehicleDao vehicleDao, ReservationDao Reservation) {
-		this.vehicleDao = vehicleDao;
-		this.reservationDao = Reservation;
-	}
+	private ReservationRepository reservationRepository;
+	@Autowired
+	private VehicleRepository vehicleRepository;
 
-	public ResponseEntity<Vehicle[]> getAllVehicles() {
-		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
-		String ipAddress = "192.168.1.206";
-		int port = 8082;
+	public ResponseEntity<Vehicle[]> getVehicleForDate(LocalDate start, LocalDate end) {
+		String apiUrl = "http://" + vehicleServiceIp + ":" + vehicleServicePort + "/vehicles/out/resa";
 
-		// Construire l'URL de l'API à appeler
-		String apiUrl = "http://" + ipAddress + ":" + port + "/vehicles";
-		return restTemplate.getForEntity(apiUrl, Vehicle[].class);
+		List<Reservation> resaForRange = reservationRepository.getReservationForDate(start, end);
+
+
+
+		List<String> vehicleList = resaForRange.stream()
+				.map(Reservation::getVehicleId)
+				.collect(Collectors.toList());
+
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<List<String>> requestEntity = new HttpEntity<>(vehicleList, headers);
+
+
+		ResponseEntity<Vehicle[]> res = restTemplate.postForEntity(apiUrl, requestEntity, Vehicle[].class);
+
+		return res;
+
+
 	}
+//	public ResponseEntity<Vehicle[]> getAllVehicles() {
+//		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
+//		String ipAddress = "192.168.1.206";
+//		int port = 8082;
+//
+//		// Construire l'URL de l'API à appeler
+//
+//		return restTemplate.getForEntity(apiUrl, Vehicle[].class);
+//	}
 
 //	-------------------------------------------------------------
 	public Vehicle[] getAvailableVehicles() {

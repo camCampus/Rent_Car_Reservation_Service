@@ -1,8 +1,23 @@
-package com.example.rent_car_reservation_service.web.dao;
+package com.example.rent_car_reservation_service.web.Repository;
 
 import com.example.rent_car_reservation_service.model.Reservation;
+import com.example.rent_car_reservation_service.model.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public interface ReservationDao extends JpaRepository<Reservation, Integer> {
+import java.time.LocalDate;
+import java.util.List;
+
+
+@Repository
+public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
+
+//   public List<Reservation> findAllByLocationStartBetweenAndLocationEndBetween(LocalDate locationStart, LocalDate locationend,  LocalDate sstard, LocalDate eend);
+
+   @Query(value = "FROM Reservation r WHERE r.locationStart BETWEEN :startDate AND :endDate OR r.locationEnd BETWEEN :startDate AND :endDate")
+   public List<Reservation> getReservationForDate(@Param("startDate") LocalDate start, @Param("endDate") LocalDate end);
+
 
 }

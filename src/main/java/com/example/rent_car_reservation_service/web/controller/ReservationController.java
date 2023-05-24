@@ -2,12 +2,13 @@ package com.example.rent_car_reservation_service.web.controller;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import com.example.rent_car_reservation_service.model.Vehicle;
-import com.example.rent_car_reservation_service.web.dao.ReservationDao;
+import com.example.rent_car_reservation_service.web.Repository.ReservationRepository;
 import com.example.rent_car_reservation_service.web.service.VehiclesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,11 @@ import java.util.Optional;
 @RequestMapping("/reservations")
 public class ReservationController {
 
-	private final ReservationDao reservationDao;
+	private final ReservationRepository reservationDao;
 	@Autowired
 	private VehiclesService vehiclesService;
 	@Autowired
-	public ReservationController(ReservationDao Reservation) {
+	public ReservationController(ReservationRepository Reservation) {
 		this.reservationDao = Reservation;
 	}
 
@@ -62,14 +63,26 @@ public class ReservationController {
 		reservationDao.deleteById(id);
 	}
 
-	@GetMapping("/testAll")
-	public ResponseEntity<Vehicle[]> getAllV() {
-		return this.vehiclesService.getAllVehicles();
-	}
+//	@GetMapping("/testAll")
+//	public ResponseEntity<Vehicle[]> getAllV() {
+//		return this.vehiclesService.getAllVehicles();
+//	}
 
 	@GetMapping("/testAviaible")
 	public Vehicle[] getAvailableV() {
 		return this.vehiclesService.getAvailableVehicles();
+	}
+
+
+	@GetMapping("/algo")
+	public ResponseEntity<Vehicle[]> getAllForDate()
+	{
+		LocalDate start = LocalDate.parse("2023-06-10");
+		//, DateTimeFormatter.ofPattern("uuuu-MM-dd")
+		LocalDate end = LocalDate.parse("2023-06-19");
+		//, DateTimeFormatter.ofPattern("uuuu-MM-dd")
+
+		return vehiclesService.getVehicleForDate(start, end);
 	}
 }
 
