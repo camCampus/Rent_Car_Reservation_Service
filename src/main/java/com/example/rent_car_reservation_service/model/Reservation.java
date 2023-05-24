@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigInteger;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +16,7 @@ public class Reservation {
 	@GeneratedValue
 	private Integer id;
 
-	private Integer licenseId;
+	private Long licenseId;
 	private Integer vehicleId;
 	@NotNull
 	private LocalDate locationStart;
@@ -31,7 +32,7 @@ public class Reservation {
 		// Constructeur par défaut requis par JPA
 	}
 
-	public Reservation(Integer id, Integer licenseId, Integer vehicleId, LocalDate locationStart, LocalDate locationEnd,
+	public Reservation(Integer id, Long licenseId, Integer vehicleId, LocalDate locationStart, LocalDate locationEnd,
 					   Integer estimateKm, Integer actualKm, Integer deposit) {
 		this.id = id;
 		this.licenseId = licenseId;
@@ -56,11 +57,11 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public Integer getLicenseId() {
+	public Long getLicenseId() {
 		return licenseId;
 	}
 
-	public void setLicenseId(Integer licenseId) {
+	public void setLicenseId(Long licenseId) {
 		this.licenseId = licenseId;
 	}
 

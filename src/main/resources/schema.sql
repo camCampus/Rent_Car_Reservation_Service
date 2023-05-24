@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS reservation;
 CREATE TABLE reservation
 (
     id             INTEGER NOT NULL,
-    license_id     INTEGER,
+    license_id     BIGINT,
     vehicle_id     INTEGER,
     location_start DATE,
     location_end   DATE,
