@@ -1,5 +1,3 @@
-INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
-VALUES (0, 987546521589, 'AA-001-AA', '2023-05-22', '2023-05-28', 500, 200, 1000, "VALIDATED");
 
 INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
 VALUES (1, 458796548514, 'BB-001-AA', '2022-05-22', '2022-05-28', 500, 200, 1000, "VALIDATED");
@@ -17,7 +15,7 @@ INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_en
 VALUES (5, 458796548514, 'KC-999-MM', '2023-06-01', '2023-06-02', 250, 45236, 152.5, "VALIDATED");
 
 INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
-VALUES (6, NULL, , '2023-06-01', '2023-06-15', NULL, NULL, NULL, "PENDING");
+VALUES (6, NULL,'BB-001-AA' , '2023-06-01', '2023-06-15', NULL, NULL, NULL, "PENDING");
 
 INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
 VALUES (7, NULL, 'GF-596-JD', '2023-06-12', '2023-06-20', NULL, NULL, NULL, "PENDING");
@@ -63,3 +61,6 @@ VALUES (20, NULL, 'MW-056-LM', '2023-06-06', '2023-06-16', NULL, NULL, NULL, "PE
 
 INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
 VALUES (21, NULL, 'KC-070-PA', '2023-06-06', '2023-06-16', NULL, NULL, NULL, "PENDING");
+
+INSERT INTO reservation (id, license_id, vehicle_id, location_start, location_end, estimate_km, actual_km, deposit, status)
+VALUES (22, 987546521589, 'AA-001-AA', '2023-05-22', '2023-05-28', 500, 200, 1000, "VALIDATED");
