@@ -2,12 +2,16 @@ package com.example.rent_car_reservation_service.web.controller;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import com.example.rent_car_reservation_service.model.Vehicle;
-import com.example.rent_car_reservation_service.web.dao.ReservationDao;
+import com.example.rent_car_reservation_service.web.Repository.ReservationDao;
+import com.example.rent_car_reservation_service.web.WrongDateExeception;
 import com.example.rent_car_reservation_service.web.service.VehiclesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +22,7 @@ public class ReservationController {
 	private final ReservationDao reservationDao;
 	@Autowired
 	private VehiclesService vehiclesService;
+
 	@Autowired
 	public ReservationController(ReservationDao Reservation) {
 		this.reservationDao = Reservation;
@@ -67,9 +72,17 @@ public class ReservationController {
 		return this.vehiclesService.getAllVehicles();
 	}
 
-	@GetMapping("/testAviaible")
-	public Vehicle[] getAvailableV() {
-		return this.vehiclesService.getAvailableVehicles();
+	@GetMapping("/AviaibleVehicles")
+	public Vehicle[] getAvailableV(@RequestParam String dateDebut, String dateFin) throws URISyntaxException, WrongDateExeception {
+		LocalDate start = LocalDate.parse(dateDebut);
+		LocalDate end = LocalDate.parse(dateFin);
+		return this.vehiclesService.getAvailableVehicles(start, end);
+	}
+
+	@ExceptionHandler(WrongDateExeception.class)
+	public ResponseEntity<Object> handleWrongDateException(WrongDateExeception ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body("{\"Invalide date \":\"" + ex.getMessage() + "\"}");
 	}
 }
 
