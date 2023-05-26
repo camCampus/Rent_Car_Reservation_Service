@@ -2,17 +2,13 @@ package com.example.rent_car_reservation_service.model;
 
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "reservation")
 public class Reservation {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private Long licenseId;
@@ -23,7 +19,7 @@ public class Reservation {
 	private LocalDate locationEnd;
 	private Integer estimateKm;
 	private Integer actualKm;
-	private Integer deposit;
+	private Float price;
 	private String status;
 
 	public Reservation() {
@@ -31,7 +27,7 @@ public class Reservation {
 	}
 
 	public Reservation(Integer id, Long licenseId, String vehicleId, LocalDate locationStart, LocalDate locationEnd,
-					   Integer estimateKm, Integer actualKm, Integer deposit, String status) {
+					   Integer estimateKm, Integer actualKm, Float price, String status) {
 		this.id = id;
 		this.licenseId = licenseId;
 		this.vehicleId = vehicleId;
@@ -39,7 +35,7 @@ public class Reservation {
 		this.locationEnd = locationEnd;
 		this.estimateKm = estimateKm;
 		this.actualKm = actualKm;
-		this.deposit = deposit;
+		this.price = price;
 		this.status = status;
 	}
 
@@ -104,12 +100,12 @@ public class Reservation {
 		this.actualKm = actualKm;
 	}
 
-	public Integer getDeposit() {
-		return deposit;
+	public Float getPrice() {
+		return price;
 	}
 
-	public void setDeposit(Integer deposit) {
-		this.deposit = deposit;
+	public void setPrice(Float deposit) {
+		this.price = deposit;
 	}
 
 	public String getStatus() { return status; }
@@ -126,7 +122,7 @@ public class Reservation {
 				", locationEnd=" + locationEnd +
 				", estimateKm=" + estimateKm +
 				", actualKm=" + actualKm +
-				", deposit=" + deposit +
+				", deposit=" + price +
 				", status='" + status + '\'' +
 				'}';
 	}

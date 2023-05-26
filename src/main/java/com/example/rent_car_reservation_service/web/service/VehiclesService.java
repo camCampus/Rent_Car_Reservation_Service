@@ -58,12 +58,13 @@ public class VehiclesService {
 		for (Reservation reservation : reservations) {
 			vehicleIds.add(reservation.getVehicleId());
 		}
-		System.out.println(vehicleIds);
+		if (vehicleIds.size() > 0) {
+//		System.out.println(vehicleIds);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		String ipAddress = "192.168.1.206";
+		String ipAddress = "192.168.1.60";
 		int port = 8082;
 		URI url = new URI("http://" + ipAddress + ":" + port + "/vehicles/out/resa");
 		List<String> objEmp = vehicleIds;
@@ -79,4 +80,11 @@ public class VehiclesService {
 
 		return responseEntity.getBody();
 	}
+		String ipAddress = "192.168.1.60";
+		int port = 8082;
+		String url = "http://" + ipAddress + ":" + port + "/vehicles";
+
+		RestTemplate restTemplate = new RestTemplate();
+		return restTemplate.getForEntity(url, Vehicle[].class).getBody();
+		}
 }

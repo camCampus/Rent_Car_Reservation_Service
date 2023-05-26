@@ -2,6 +2,7 @@ package com.example.rent_car_reservation_service.web.Repository;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,5 +18,9 @@ public interface ReservationDao extends JpaRepository<Reservation, Integer> {
 
 	@Query("SELECT r FROM Reservation r WHERE r.status != 'ABANDONED' AND (r.locationStart BETWEEN :dateDebut AND :dateFin OR r.locationEnd BETWEEN :dateDebut AND :dateFin)")
 	List<Reservation> findByDateBetween(@Param("dateDebut") LocalDate dateDebut, @Param("dateFin") LocalDate dateFin);
+
+	@Modifying
+	@Query("UPDATE Reservation r SET r.estimateKm = :estimateKm, r.price = :price WHERE r.id = :reservationId")
+	void updateEstimatedPrice(@Param("reservationId") Integer reservationId, @Param("estimateKm") int estimateKm, @Param("price") float price);
 
 }
