@@ -2,19 +2,15 @@ package com.example.rent_car_reservation_service.model;
 
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "reservation")
+
 public class Reservation {
 	@Id
-	@GeneratedValue
-	private Integer id;
-
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer reservation_id;
 	private Long licenseId;
 	private String vehicleId;
 	@NotNull
@@ -32,7 +28,7 @@ public class Reservation {
 
 	public Reservation(Integer id, Long licenseId, String vehicleId, LocalDate locationStart, LocalDate locationEnd,
 					   Integer estimateKm, Integer actualKm, Integer deposit, String status) {
-		this.id = id;
+		this.reservation_id = id;
 		this.licenseId = licenseId;
 		this.vehicleId = vehicleId;
 		this.locationStart = locationStart;
@@ -49,11 +45,11 @@ public class Reservation {
 	}
 
 	public Integer getId() {
-		return id;
+		return reservation_id;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.reservation_id = id;
 	}
 
 	public Long getLicenseId() {
@@ -119,7 +115,7 @@ public class Reservation {
 	@Override
 	public String toString() {
 		return "Reservation{" +
-				"id=" + id +
+				"id=" + reservation_id +
 				", licenseId=" + licenseId +
 				", vehicleId=" + vehicleId +
 				", locationStart=" + locationStart +

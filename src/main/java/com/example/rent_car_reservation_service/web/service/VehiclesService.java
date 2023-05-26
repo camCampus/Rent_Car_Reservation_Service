@@ -34,74 +34,49 @@ public class VehiclesService {
 
 	public ResponseEntity<Vehicle[]> getVehicleForDate(LocalDate start, LocalDate end) {
 		String apiUrl = "http://" + vehicleServiceIp + ":" + vehicleServicePort + "/vehicles/out/resa";
-
+		/**
+		 * Fonction pour récupérer les réservations en fonction des dates envoyées par le client.
+		 *
+		 */
 		List<Reservation> resaForRange = reservationRepository.getReservationForDate(start, end);
 
-
-
+		/**
+		 * Fonction pour récupérer les id des véhicules dans la liste des réservations [resaForRange]
+		 */
 		List<String> vehicleList = resaForRange.stream()
 				.map(Reservation::getVehicleId)
 				.collect(Collectors.toList());
 
+		if (vehicleList.size() > 0)
+		{
+			/**
+			 * Création d'un header et d'une httpEntity pour former l'objet requestEntity qui prend en paramètre la list des vehicules
+			 * id et le header.
+			 */
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<List<String>> requestEntity = new HttpEntity<>(vehicleList, headers);
 
-		HttpEntity<List<String>> requestEntity = new HttpEntity<>(vehicleList, headers);
+			/**
+			 * Requete du service vehicule pour renvoyer tous les vécules qui ne sont pas dans la liste envoyée en parametre.
+			 */
+			ResponseEntity<Vehicle[]> res = restTemplate.postForEntity(apiUrl, requestEntity, Vehicle[].class);
 
-
-		ResponseEntity<Vehicle[]> res = restTemplate.postForEntity(apiUrl, requestEntity, Vehicle[].class);
-
-		return res;
-
+			return res;
+		}
+		String getAll = "http://" + vehicleServiceIp + ":" + vehicleServicePort + "/vehicles";
+		return restTemplate.getForEntity(getAll, Vehicle[].class);
 
 	}
-//	public ResponseEntity<Vehicle[]> getAllVehicles() {
-//		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
-//		String ipAddress = "192.168.1.206";
-//		int port = 8082;
-//
-//		// Construire l'URL de l'API à appeler
-//
-//		return restTemplate.getForEntity(apiUrl, Vehicle[].class);
-//	}
 
-//	-------------------------------------------------------------
-	public Vehicle[] getAvailableVehicles() {
-		List<Reservation> reservations = reservationDao.findAll();
-//		for (Reservation reservation : reservations) {
-//			System.out.println(reservation.getVehicleId());
-//		}
+	public List<String> test(LocalDate s, LocalDate e
+	)
+	{
+		List<Reservation> resaForRange = reservationRepository.getReservationForDate(s, e);
 
-		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
-		String ipAddress = "192.168.1.206";
-		int port = 8082;
-		// Construire l'URL de l'API à appeler
-		String apiUrl = "http://" + ipAddress + ":" + port + "/vehicles";
-		Vehicle[] response = restTemplate.getForEntity(apiUrl, Vehicle[].class).getBody();
-
-//		assert response != null;
-//		for (Vehicle vehicle : response) {
-//			System.out.println(vehicle.getRegistration());
-//		}
-//		for (Reservation reservation : reservations){
-//			for (Vehicle vehicle : response) {
-//				if (Objects.equals(reservation.getVehicleId(), vehicle.getRegistration())) {
-//					System.out.println(reservation.getVehicleId());
-//				}
-//			}
-//		}
-		return response;
-//
-//		assert response != null;
-//		List<Vehicle> availableVehicles = Arrays.stream(response)
-//				.filter(vehicle -> "AVAILABLE".equals(vehicle.getStatus()))
-//				.collect(Collectors.toList());
-//
-//		// Faites ce que vous voulez avec la liste de véhicules disponibles
-////		for (Vehicle vehicle : availableVehicles) {
-////			System.out.println(vehicle.getRegistration());
-////		}
-//		return availableVehicles;
+		return  resaForRange.stream()
+				.map(Reservation::getVehicleId)
+				.collect(Collectors.toList());
 	}
 }

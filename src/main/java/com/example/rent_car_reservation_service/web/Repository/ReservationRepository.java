@@ -14,9 +14,9 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
-//   public List<Reservation> findAllByLocationStartBetweenAndLocationEndBetween(LocalDate locationStart, LocalDate locationend,  LocalDate sstard, LocalDate eend);
 
-   @Query(value = "FROM Reservation r WHERE r.locationStart BETWEEN :startDate AND :endDate OR r.locationEnd BETWEEN :startDate AND :endDate")
+
+   @Query(value = "FROM Reservation r WHERE r.status != 'ABANDONED' AND (r.locationStart BETWEEN :startDate AND :endDate OR r.locationEnd BETWEEN :startDate AND :endDate)")
    public List<Reservation> getReservationForDate(@Param("startDate") LocalDate start, @Param("endDate") LocalDate end);
 
 
