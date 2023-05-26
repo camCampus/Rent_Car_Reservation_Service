@@ -2,15 +2,23 @@ package com.example.rent_car_reservation_service.web.service;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import com.example.rent_car_reservation_service.model.Vehicle;
-import com.example.rent_car_reservation_service.web.dao.ReservationDao;
-import com.example.rent_car_reservation_service.web.dao.VehicleDao;
+import com.example.rent_car_reservation_service.web.Repository.ReservationDao;
+import com.example.rent_car_reservation_service.web.Repository.VehicleDao;
+import com.example.rent_car_reservation_service.web.WrongDateExeception;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Objects;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @Service
@@ -37,41 +45,46 @@ public class VehiclesService {
 	}
 
 //	-------------------------------------------------------------
-	public Vehicle[] getAvailableVehicles() {
-		List<Reservation> reservations = reservationDao.findAll();
-//		for (Reservation reservation : reservations) {
-//			System.out.println(reservation.getVehicleId());
-//		}
+	public Vehicle[] getAvailableVehicles(LocalDate dateDebut,LocalDate dateFin) throws URISyntaxException, WrongDateExeception {
 
-		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
-		String ipAddress = "192.168.1.206";
+		if (dateDebut.isBefore(LocalDate.now()))
+		{
+			throw new WrongDateExeception("We don't use timetravel, please use a valide date");
+		}
+
+		List<Reservation> reservations = reservationDao.findByDateBetween(dateDebut, dateFin);
+		List<String> vehicleIds = new ArrayList<>();
+
+		for (Reservation reservation : reservations) {
+			vehicleIds.add(reservation.getVehicleId());
+		}
+		if (vehicleIds.size() > 0) {
+//		System.out.println(vehicleIds);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		String ipAddress = "192.168.1.60";
 		int port = 8082;
-		// Construire l'URL de l'API à appeler
-		String apiUrl = "http://" + ipAddress + ":" + port + "/vehicles";
-		Vehicle[] response = restTemplate.getForEntity(apiUrl, Vehicle[].class).getBody();
+		URI url = new URI("http://" + ipAddress + ":" + port + "/vehicles/out/resa");
+		List<String> objEmp = vehicleIds;
 
-//		assert response != null;
-//		for (Vehicle vehicle : response) {
-//			System.out.println(vehicle.getRegistration());
-//		}
-//		for (Reservation reservation : reservations){
-//			for (Vehicle vehicle : response) {
-//				if (Objects.equals(reservation.getVehicleId(), vehicle.getRegistration())) {
-//					System.out.println(reservation.getVehicleId());
-//				}
-//			}
-//		}
-		return response;
-//
-//		assert response != null;
-//		List<Vehicle> availableVehicles = Arrays.stream(response)
-//				.filter(vehicle -> "AVAILABLE".equals(vehicle.getStatus()))
-//				.collect(Collectors.toList());
-//
-//		// Faites ce que vous voulez avec la liste de véhicules disponibles
-////		for (Vehicle vehicle : availableVehicles) {
-////			System.out.println(vehicle.getRegistration());
-////		}
-//		return availableVehicles;
+		HttpEntity<List<String>> requestEntity = new HttpEntity<>(objEmp, headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Vehicle[]> responseEntity = restTemplate.postForEntity(url, requestEntity, Vehicle[].class);
+
+		System.out.println("Status Code: " + responseEntity.getStatusCode());
+		System.out.println("Id: " + Arrays.toString(Objects.requireNonNull(responseEntity.getBody())));
+		System.out.println("Location: " + responseEntity.getHeaders().getLocation());
+
+		return responseEntity.getBody();
 	}
+		String ipAddress = "192.168.1.60";
+		int port = 8082;
+		String url = "http://" + ipAddress + ":" + port + "/vehicles";
+
+		RestTemplate restTemplate = new RestTemplate();
+		return restTemplate.getForEntity(url, Vehicle[].class).getBody();
+		}
 }
