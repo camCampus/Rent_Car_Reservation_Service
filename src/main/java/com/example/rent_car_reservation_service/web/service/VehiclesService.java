@@ -22,7 +22,7 @@ public class VehiclesService {
 	private VehicleRepository vehicleDao;
 	private ReservationRepository reservationDao;
 
-	private String vehicleServiceIp = "192.168.1.206";
+	private String vehicleServiceIp = "172.10.230.20";
 
 	private int vehicleServicePort = 8082;
 

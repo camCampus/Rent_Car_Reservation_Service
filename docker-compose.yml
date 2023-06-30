@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+
+  reservation:
+    image: rent_car_reservation_service
+    networks:
+      spring:
+        ipv4_address: 172.10.230.10
+    restart: always
+    container_name: "spring-reservation"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reservation.rule=Host(`resa.localhost`)"
+      - "traefik.http.routers.reservation.entrypoints=web"
+    ports:
+      - 8083:8083
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/reservation_service?allowPublicKeyRetrieval=true&useSSL=false
+    depends_on:
+      - mysqldb
+
+  vehicle:
+    image: rent-vehicle-service
+    networks:
+      spring:
+        ipv4_address: 172.10.230.20
+    build: .
+    restart: always
+    container_name: "spring-vehicule"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vehicle.rule=Host(`vehicle.localhost`)"
+      - "traefik.http.routers.vehicle.entrypoints=web"
+    ports:
+      - 8082:8082
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-vehicle:3306/vehicle_service?allowPublicKeyRetrieval=true&useSSL=false
+    depends_on:
+      - mysql-vehicle
+
+  user:
+    image: rent-user-service
+    networks:
+      spring:
+        ipv4_address: 172.10.230.30
+    build: .
+    restart: always
+    container_name: "spring-user"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user.rule=Host(`user.localhost`)"
+      - "traefik.http.routers.user.entrypoints=web"
+    ports:
+      - 8084:8084
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-user:3306/user_service?allowPublicKeyRetrieval=true&useSSL=false
+    depends_on:
+      - mysql-user
+
+  license-check:
+    image: rent-license-check
+    networks:
+      spring:
+        ipv4_address: 172.10.230.40
+    build: .
+    restart: always
+    container_name: "spring-license-check"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.license-check.rule=Host(`license-check.localhost`)"
+      - "traefik.http.routers.license-check.entrypoints=web"
+    ports:
+      - 8085:8085
+
+  mysqldb:
+    platform: linux/x86_64
+    image: mysql:8.0
+    networks:
+      spring:
+        ipv4_address: 172.10.230.3
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USERNAME: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "reservation_service"
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/data.sql
+
+
+  mysql-vehicle:
+      platform: linux/x86_64
+      image: mysql:8.0
+      networks:
+        spring:
+          ipv4_address: 172.10.230.2
+      restart: always
+      ports:
+        - 3308:3306
+      environment:
+        MYSQL_USERNAME: "root"
+        MYSQL_PASSWORD: "root"
+        MYSQL_ROOT_PASSWORD: "root"
+        MYSQL_DATABASE: "vehicle_service"
+      volumes:
+        - ./schema-vehicle.sql:/docker-entrypoint-initdb.d/schema-vehicle.sql
+        - ./data-vehicle.sql:/docker-entrypoint-initdb.d/data-vehicle.sql
+
+  mysql-user:
+    platform: linux/x86_64
+    image: mysql:8.0
+    networks:
+      spring:
+        ipv4_address: 172.10.230.5
+    restart: always
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_USERNAME: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "user_service"
+    volumes:
+      - ./schema-user.sql:/docker-entrypoint-initdb.d/schema-user.sql
+      - ./data-user.sql:/docker-entrypoint-initdb.d/data-user.sql
+
+networks:
+  spring:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.10.230.0/24"

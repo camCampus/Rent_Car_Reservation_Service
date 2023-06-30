@@ -1,0 +1,27 @@
+INSERT INTO vehicle_service.type(id, base_price, kilometer_price, vehicle_type) VALUES (1,50.0, 0.29, 'CAR');
+INSERT INTO vehicle_service.type(id, base_price, kilometer_price, vehicle_type) VALUES (2, 100.0, 0.29, 'MOTORCYCLE');
+INSERT INTO vehicle_service.type(id, base_price, kilometer_price, vehicle_type) VALUES (3, 80.0, 0.29, 'UTILITY');
+
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('AA-001-AA', 'RENAULT', 'WHITE', 10000, 'TRAFIC', TRUE, 4, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('BB-001-AA', 'VOLKSWAGEN', 'GRAY', 50000, 'TRANSPORTER', TRUE, 5, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('CC-001-AA', 'PEUGEOT', 'BLACK', 100000, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('ZZ-001-AA', 'RENAULT', 'WHITE', 1000, 'CLIO',TRUE , 4, 'CAR');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('CC-023-GJ', 'PEUGEOT', 'BLACK', 35890, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('CP-796-AA', 'VOLKSWAGEN', 'BLACK', 542448, 'TRANSPORTER', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('GF-596-JD', 'PEUGEOT', 'BLACK', 35890, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('CC-630-AA', 'VOLKSWAGEN', 'BLACK', 35890, 'TRANSPORTER', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('FF-258-PA', 'PEUGEOT', 'GRAY', 5698745, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('KC-070-PA', 'PEUGEOT', 'GRAY', 457845, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('KC-999-MM', 'PEUGEOT', 'WHITE', 45236, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('MW-056-LM', 'VOLKSWAGEN', 'GRAY', 52450, 'TRANSPORTER', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('SQ-658-PA', 'VOLKSWAGEN', 'WHITE', 5698745, 'TRANSPORTER', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('PA-070-AP', 'PEUGEOT', 'GRAY', 12000, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('NC-452-CN', 'PEUGEOT', 'GRAY', 542, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('MV-769-GW', 'PEUGEOT', 'BLACK', 32045, 'EXPERT', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('FD-963-VN', 'RENAULT', 'BLACK', 254698, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('EZ-258-OO', 'RENAULT', 'WHITE', 25367, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('TR-345-EZ', 'RENAULT', 'WHITE', 2546398, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('HG-210-UJ', 'RENAULT', 'BLACK', 254698, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('PP-540-LU', 'RENAULT', 'BLACK', 254698, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('FD-654-MI', 'RENAULT', 'BLACK', 254698, 'TRAFIC', TRUE, 6, 'UTILITY');
+INSERT INTO vehicle_service.vehicle(registration, brand, color, kilometer, model, rent_status, tax_horses, type) VALUE ('NC-360-AA', 'PEUGEOT', 'BLACK', 12354, 'EXPERT', FALSE, 6, 'UTILITY');
