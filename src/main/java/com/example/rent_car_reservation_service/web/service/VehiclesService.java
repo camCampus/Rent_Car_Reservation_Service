@@ -36,7 +36,7 @@ public class VehiclesService {
 
 	public ResponseEntity<Vehicle[]> getAllVehicles() {
 		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
-		String ipAddress = "192.168.1.206";
+		String ipAddress = "172.10.230.20";
 		int port = 8082;
 
 		// Construire l'URL de l'API à appeler
@@ -64,7 +64,7 @@ public class VehiclesService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		String ipAddress = "192.168.1.60";
+		String ipAddress = "172.10.230.20";
 		int port = 8082;
 		URI url = new URI("http://" + ipAddress + ":" + port + "/vehicles/out/resa");
 		List<String> objEmp = vehicleIds;
@@ -80,7 +80,7 @@ public class VehiclesService {
 
 		return responseEntity.getBody();
 	}
-		String ipAddress = "192.168.1.60";
+		String ipAddress = "172.10.230.20";
 		int port = 8082;
 		String url = "http://" + ipAddress + ":" + port + "/vehicles";
 

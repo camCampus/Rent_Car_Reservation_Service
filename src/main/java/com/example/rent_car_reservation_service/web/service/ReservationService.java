@@ -26,12 +26,12 @@ public class ReservationService {
 		String idVehicle = reservation.get().getVehicleId();
 		System.out.println(idVehicle);
 
-		String url = "http://localhost:8082/vehicles/" + idVehicle;
+		String url = "http://172.10.230.20:8082/vehicles/" + idVehicle;
 		Vehicle response = restTemplate.getForObject(url, Vehicle.class);
 		assert response != null;
 		System.out.println(response.getType());
 
-		String url2 = "http://localhost:8082/type/string/" + response.getType();
+		String url2 = "http://172.10.230.20:8082/type/string/" + response.getType();
 		Type responseType = restTemplate.getForObject(url2, Type.class);
 		assert responseType != null;
 		int basePrice = responseType.getBasePrice();
