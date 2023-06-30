@@ -6,11 +6,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-
 public class Reservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer reservation_id;
+	private Integer id;
+
 	private Long licenseId;
 	private String vehicleId;
 	@NotNull
@@ -19,7 +19,7 @@ public class Reservation {
 	private LocalDate locationEnd;
 	private Integer estimateKm;
 	private Integer actualKm;
-	private Integer deposit;
+	private Float price;
 	private String status;
 
 	public Reservation() {
@@ -27,15 +27,15 @@ public class Reservation {
 	}
 
 	public Reservation(Integer id, Long licenseId, String vehicleId, LocalDate locationStart, LocalDate locationEnd,
-					   Integer estimateKm, Integer actualKm, Integer deposit, String status) {
-		this.reservation_id = id;
+					   Integer estimateKm, Integer actualKm, Float price, String status) {
+		this.id = id;
 		this.licenseId = licenseId;
 		this.vehicleId = vehicleId;
 		this.locationStart = locationStart;
 		this.locationEnd = locationEnd;
 		this.estimateKm = estimateKm;
 		this.actualKm = actualKm;
-		this.deposit = deposit;
+		this.price = price;
 		this.status = status;
 	}
 
@@ -45,11 +45,11 @@ public class Reservation {
 	}
 
 	public Integer getId() {
-		return reservation_id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		this.reservation_id = id;
+		this.id = id;
 	}
 
 	public Long getLicenseId() {
@@ -100,12 +100,12 @@ public class Reservation {
 		this.actualKm = actualKm;
 	}
 
-	public Integer getDeposit() {
-		return deposit;
+	public Float getPrice() {
+		return price;
 	}
 
-	public void setDeposit(Integer deposit) {
-		this.deposit = deposit;
+	public void setPrice(Float deposit) {
+		this.price = deposit;
 	}
 
 	public String getStatus() { return status; }
@@ -115,14 +115,14 @@ public class Reservation {
 	@Override
 	public String toString() {
 		return "Reservation{" +
-				"id=" + reservation_id +
+				"id=" + id +
 				", licenseId=" + licenseId +
 				", vehicleId=" + vehicleId +
 				", locationStart=" + locationStart +
 				", locationEnd=" + locationEnd +
 				", estimateKm=" + estimateKm +
 				", actualKm=" + actualKm +
-				", deposit=" + deposit +
+				", deposit=" + price +
 				", status='" + status + '\'' +
 				'}';
 	}

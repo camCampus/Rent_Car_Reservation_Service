@@ -2,81 +2,89 @@ package com.example.rent_car_reservation_service.web.service;
 
 import com.example.rent_car_reservation_service.model.Reservation;
 import com.example.rent_car_reservation_service.model.Vehicle;
-import com.example.rent_car_reservation_service.web.Repository.ReservationRepository;
-import com.example.rent_car_reservation_service.web.Repository.VehicleRepository;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.example.rent_car_reservation_service.web.Repository.ReservationDao;
+import com.example.rent_car_reservation_service.web.Repository.VehicleDao;
+import com.example.rent_car_reservation_service.web.WrongDateExeception;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @Service
 public class VehiclesService {
 	@Autowired
 	private RestTemplate restTemplate;
-	private VehicleRepository vehicleDao;
-	private ReservationRepository reservationDao;
-
-	private String vehicleServiceIp = "172.10.230.20";
-
-	private int vehicleServicePort = 8082;
-
+	private VehicleDao vehicleDao;
+	private ReservationDao reservationDao;
 
 	@Autowired
-	private ReservationRepository reservationRepository;
-	@Autowired
-	private VehicleRepository vehicleRepository;
+	public VehiclesService(VehicleDao vehicleDao, ReservationDao Reservation) {
+		this.vehicleDao = vehicleDao;
+		this.reservationDao = Reservation;
+	}
 
-	public ResponseEntity<Vehicle[]> getVehicleForDate(LocalDate start, LocalDate end) {
-		String apiUrl = "http://" + vehicleServiceIp + ":" + vehicleServicePort + "/vehicles/out/resa";
-		/**
-		 * Fonction pour récupérer les réservations en fonction des dates envoyées par le client.
-		 *
-		 */
-		List<Reservation> resaForRange = reservationRepository.getReservationForDate(start, end);
+	public ResponseEntity<Vehicle[]> getAllVehicles() {
+		// Remplacez l'adresse IP et port par celle de l'ordinateur distant
+		String ipAddress = "192.168.1.206";
+		int port = 8082;
 
-		/**
-		 * Fonction pour récupérer les id des véhicules dans la liste des réservations [resaForRange]
-		 */
-		List<String> vehicleList = resaForRange.stream()
-				.map(Reservation::getVehicleId)
-				.collect(Collectors.toList());
+		// Construire l'URL de l'API à appeler
+		String apiUrl = "http://" + ipAddress + ":" + port + "/vehicles";
+		return restTemplate.getForEntity(apiUrl, Vehicle[].class);
+	}
 
-		if (vehicleList.size() > 0)
+//	-------------------------------------------------------------
+	public Vehicle[] getAvailableVehicles(LocalDate dateDebut,LocalDate dateFin) throws URISyntaxException, WrongDateExeception {
+
+		if (dateDebut.isBefore(LocalDate.now()))
 		{
-			/**
-			 * Création d'un header et d'une httpEntity pour former l'objet requestEntity qui prend en paramètre la list des vehicules
-			 * id et le header.
-			 */
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-
-			HttpEntity<List<String>> requestEntity = new HttpEntity<>(vehicleList, headers);
-
-			/**
-			 * Requete du service vehicule pour renvoyer tous les vécules qui ne sont pas dans la liste envoyée en parametre.
-			 */
-			ResponseEntity<Vehicle[]> res = restTemplate.postForEntity(apiUrl, requestEntity, Vehicle[].class);
-
-			return res;
+			throw new WrongDateExeception("We don't use timetravel, please use a valide date");
 		}
-		String getAll = "http://" + vehicleServiceIp + ":" + vehicleServicePort + "/vehicles";
-		return restTemplate.getForEntity(getAll, Vehicle[].class);
 
+		List<Reservation> reservations = reservationDao.findByDateBetween(dateDebut, dateFin);
+		List<String> vehicleIds = new ArrayList<>();
+
+		for (Reservation reservation : reservations) {
+			vehicleIds.add(reservation.getVehicleId());
+		}
+		if (vehicleIds.size() > 0) {
+//		System.out.println(vehicleIds);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		String ipAddress = "192.168.1.60";
+		int port = 8082;
+		URI url = new URI("http://" + ipAddress + ":" + port + "/vehicles/out/resa");
+		List<String> objEmp = vehicleIds;
+
+		HttpEntity<List<String>> requestEntity = new HttpEntity<>(objEmp, headers);
+
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Vehicle[]> responseEntity = restTemplate.postForEntity(url, requestEntity, Vehicle[].class);
+
+		System.out.println("Status Code: " + responseEntity.getStatusCode());
+		System.out.println("Id: " + Arrays.toString(Objects.requireNonNull(responseEntity.getBody())));
+		System.out.println("Location: " + responseEntity.getHeaders().getLocation());
+
+		return responseEntity.getBody();
 	}
+		String ipAddress = "192.168.1.60";
+		int port = 8082;
+		String url = "http://" + ipAddress + ":" + port + "/vehicles";
 
-	public List<String> test(LocalDate s, LocalDate e
-	)
-	{
-		List<Reservation> resaForRange = reservationRepository.getReservationForDate(s, e);
-
-		return  resaForRange.stream()
-				.map(Reservation::getVehicleId)
-				.collect(Collectors.toList());
-	}
+		RestTemplate restTemplate = new RestTemplate();
+		return restTemplate.getForEntity(url, Vehicle[].class).getBody();
+		}
 }
