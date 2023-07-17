@@ -56,7 +56,7 @@ services:
       - mysql-vehicle
 
   user:
-    image: rent-user-service
+    image: rent-uuu-service
     networks:
       spring:
         ipv4_address: 172.10.230.30
